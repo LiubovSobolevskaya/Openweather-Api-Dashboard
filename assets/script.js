@@ -1,10 +1,5 @@
-// Initial array of movies
-
-
-
 var API_key = '6287ac582e2f7161a8095a421dedeb31';
 var city;
-
 
 // displayCityInfo function re-renders the HTML to display the appropriate content
 function displayCityWeather() {
@@ -166,7 +161,7 @@ function displayCityWeather() {
             for (var i=0; i<days.length; i++){
 
                 var cityCard = $("<div>");
-                cityCard.addClass("card col-6 col-md-2 col-lg-2 bg-dark text-light");
+                cityCard.addClass("col-6 col-md-2 col-lg-2 bg-dark text-light");
                 day = days[i];
                 console.log(day);
   
@@ -202,28 +197,29 @@ function displayCityWeather() {
 
                 var icon_png = `https://openweathermap.org/img/wn/${max_icon}@2x.png`;
 
-                var date = $("<h2>");
+                var date = $("<h3>");
                 var spanIcon = $("<span>");
                 var weatherIcon = $("<img>");
                 weatherIcon.attr("src", icon_png)
-
-                date.text(`${day}`);
+ 
+                date.text(day.split('-')[1]+'/'+day.split('-')[2]+'/'+day.split('-')[0]);
                 spanIcon.append(weatherIcon);
                 date.append(spanIcon);   
                 cityCard.append(date);
      
                 var pTemp_min = $("<p>")
-                pTemp_min.text("Temperature min: " + temp_min + "°F");
+                pTemp_min.text("Temp min: " + temp_min + "°F");
                 // Displaying  min Temperature
                 cityCard.append(pTemp_min);
  
                 var pTemp_max = $("<p>")
-                pTemp_max.text("Temperature max: " + temp_max + "°F");
+                pTemp_max.text("Temp max: " + temp_max + "°F");
                 // Displaying  max Temperature
                 cityCard.append(pTemp_max);
 
-                var pHum = $("<p>")
-                pHum.text("Average Humidity: " + humidity_mean + "%");
+                var pHum = $("<p>");
+    
+                pHum.text("Avg Humidity: " + humidity_mean + "%");
             
                 // Displaying Humidity
                 cityCard.append(pHum);
