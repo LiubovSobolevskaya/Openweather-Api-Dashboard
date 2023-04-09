@@ -19,15 +19,24 @@ function displayMainCityInfo() {
     }
     var cityURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`
     console.log(cityURL)
-    //THEN I am presented with the city name, the date, an icon representation of weather conditions, 
-    // the temperature, the humidity, and the wind speed
-    
+
+
+    var storedCities = JSON.parse(localStorage.getItem("cities"));
+    if (!storedCities) {
+        // If no scores are stored, create a new array
+        storedCities = [];
+    }
+    storedCities.push(city);
+    localStorage.setItem("cities", JSON.stringify(storedCities));
     // Creating an AJAX call for the specific movie button being clicked
     $.ajax({
         url: cityURL,
         method: "GET"
     }).then(function(response) {
-    
+        // if (!response){
+        //     alert("Please check the city name spelling!")
+        //     return;
+        // }
         console.log(response[0]);
         var lon = response[0].lon;
         var lat = response[0].lat;
@@ -251,6 +260,8 @@ function displayMainCityInfo() {
                 cityCard.append(pWindSp);
                 moreDaysContainer.append(cityCard);
 
+                $("#city-input").empty();
+
               
              
             }
@@ -271,3 +282,36 @@ function displayMainCityInfo() {
 $("#city-search-btn").on("click", displayMainCityInfo);
 
 
+// // Function for displaying  archived cities
+function renderButtons() {
+
+    cities = JSON.parse(localStorage.getItem("cities"));
+    
+    // Deleting the movies prior to adding new movies
+    // (this is necessary otherwise you will have repeat buttons)
+    $("#buttons-view").empty();
+
+    // Looping through the array of movies
+    for (var i = 0; i < cities.length; i++) {
+
+        // Then dynamicaly generating buttons for each movie in the array
+        // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+        var newButton = $("<button>");
+        // Adding a class of movie-btn to our button
+
+        // Adding a data-attribute
+        newButton.attr("data-city", cities[i]);
+        // Providing the initial button text
+        newButton.text(cities[i]);
+        newButton.addClass("btn btn-block btn-custom w-90");
+        // Adding the button to the buttons-view div
+        $("#buttons-view").append(newButton);
+    }
+}
+
+
+
+
+
+// Calling the renderButtons function to display the intial buttons
+renderButtons();
