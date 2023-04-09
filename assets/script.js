@@ -4,7 +4,7 @@ var city;
 // displayCityInfo function re-renders the HTML to display the appropriate content
 function displayCityWeather() {
 
-    var cityURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`
+    var cityURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`
     console.log(cityURL)
 
     // Creating an AJAX call for the specific movie button being clicked
@@ -20,7 +20,7 @@ function displayCityWeather() {
         var lon = response[0].lon;
         var lat = response[0].lat;
   
-        var weatherURL =`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
+        var weatherURL =`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
         console.log(weatherURL)
         
 
@@ -288,6 +288,7 @@ function renderButtons() {
 
         // Then dynamicaly generating buttons for each movie in the array
         // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+
         var newButton = $("<button>");
         // Adding a class of movie-btn to our button
   
