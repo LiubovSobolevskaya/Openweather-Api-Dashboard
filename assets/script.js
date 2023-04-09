@@ -234,22 +234,13 @@ function displayCityWeather() {
                 // Displaying Wind Speed
                 cityCard.append(pWindSp);
                 moreDaysContainer.append(cityCard);
-
               
 
-              
-             
             }
    
 
-
           
         }); 
-
-
-
-
-
 
 
     });
@@ -262,7 +253,7 @@ function CityWeather(event){
     if (city){
         displayCityWeather();
     }
-    $("#city-input").empty();
+    $("#city-input").val("");
 
     var storedCities = JSON.parse(localStorage.getItem("cities"));
     if (!storedCities) {
