@@ -75,6 +75,8 @@ function displayCityWeather() {
             // Displaying Wind Speed
             cityDiv.append(pWindSpeed);
 
+            $('#forecastinfo').text('5 Days Forecast:');
+
         }); 
         var forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
         console.log(forecastURL);
@@ -83,7 +85,8 @@ function displayCityWeather() {
             method: "GET"
         }).then(function(response) {
             forecast = response.list;
-         
+
+            
 
             var temperature_max = {};
             var temperature_min= {};
@@ -161,7 +164,7 @@ function displayCityWeather() {
             for (var i=0; i<days.length; i++){
 
                 var cityCard = $("<div>");
-                cityCard.addClass("col-6 col-md-2 col-lg-2 bg-dark text-light");
+                cityCard.addClass("col-6 col-md-2 col-lg-2");
                 day = days[i];
                 console.log(day);
   
@@ -246,8 +249,11 @@ function CityWeather(event){
     event.preventDefault();
 
     city = $("#city-input").val().trim();
-    if (city){
+    if (city && city!=""){
         displayCityWeather();
+    }
+    else{
+        return;
     }
     $("#city-input").val("");
 
