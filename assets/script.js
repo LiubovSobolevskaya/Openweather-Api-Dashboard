@@ -3,31 +3,15 @@
 
 
 var API_key = '6287ac582e2f7161a8095a421dedeb31';
-
+var city;
 
 
 // displayCityInfo function re-renders the HTML to display the appropriate content
-function displayMainCityInfo() {
+function displayCityWeather() {
 
-
-    
-    //var city = $(this).attr("data-city");
-    var city = $("#city-input").val()
-
-    if (!city){
-       return;
-    }
     var cityURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`
     console.log(cityURL)
 
-
-    var storedCities = JSON.parse(localStorage.getItem("cities"));
-    if (!storedCities) {
-        // If no scores are stored, create a new array
-        storedCities = [];
-    }
-    storedCities.push(city);
-    localStorage.setItem("cities", JSON.stringify(storedCities));
     // Creating an AJAX call for the specific movie button being clicked
     $.ajax({
         url: cityURL,
@@ -96,15 +80,6 @@ function displayMainCityInfo() {
             // Displaying Wind Speed
             cityDiv.append(pWindSpeed);
 
-    
-            // Appending new Button
-            var cityButtons = $("#buttons-view");
-            var newCity = $("<button>");
-            newCity.html(city);
-            newCity.attr("data-city", city);
-            newCity.addClass("btn btn-block btn-custom w-90");
-           
-            cityButtons.prepend(newCity);
         }); 
         var forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
         console.log(forecastURL);
@@ -260,7 +235,7 @@ function displayMainCityInfo() {
                 cityCard.append(pWindSp);
                 moreDaysContainer.append(cityCard);
 
-                $("#city-input").empty();
+              
 
               
              
@@ -279,7 +254,31 @@ function displayMainCityInfo() {
 
     });
 }
-$("#city-search-btn").on("click", displayMainCityInfo);
+
+function CityWeather(event){
+    event.preventDefault();
+
+    city = $("#city-input").val().trim();
+    if (city){
+        displayCityWeather();
+    }
+    $("#city-input").empty();
+
+    var storedCities = JSON.parse(localStorage.getItem("cities"));
+    if (!storedCities) {
+        // If no scores are stored, create a new array
+        storedCities = [];
+    }
+    if (!storedCities.includes(city)){
+        storedCities.push(city);
+    }
+    
+    localStorage.setItem("cities", JSON.stringify(storedCities));
+    renderButtons()
+
+
+}
+$("#city-search-btn").on("click", CityWeather);
 
 
 // // Function for displaying  archived cities
@@ -298,20 +297,23 @@ function renderButtons() {
         // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
         var newButton = $("<button>");
         // Adding a class of movie-btn to our button
-
+  
         // Adding a data-attribute
         newButton.attr("data-city", cities[i]);
         // Providing the initial button text
         newButton.text(cities[i]);
-        newButton.addClass("btn btn-block btn-custom w-90");
+        newButton.addClass("btn btn-block btn-custom city-btn w-90 ");
         // Adding the button to the buttons-view div
-        $("#buttons-view").append(newButton);
+        $("#buttons-view").prepend(newButton);
     }
 }
+function showCity(){
+    city = $(this).attr("data-city");
+    displayCityWeather()
 
 
+}
 
-
-
+$(document).on("click", ".city-btn", showCity);
 // Calling the renderButtons function to display the intial buttons
 renderButtons();
