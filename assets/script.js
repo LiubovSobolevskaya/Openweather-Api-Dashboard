@@ -40,7 +40,7 @@ function displayCityWeather() {
             //console.log(icon );
             var cityDiv = $('#chosenCity').empty();
             cityDiv.addClass("card");
-    
+      
             // Creating an element to have the rating displayed
             var cityName = $("<h2>");
             var spanIcon = $("<span>");
@@ -200,7 +200,7 @@ function displayCityWeather() {
 
                 var icon_png = `https://openweathermap.org/img/wn/${max_icon}@2x.png`;
 
-                var date = $("<h3>");
+                var date = $("<h4>");
                 var spanIcon = $("<span>");
                 var weatherIcon = $("<img>");
                 weatherIcon.attr("src", icon_png)

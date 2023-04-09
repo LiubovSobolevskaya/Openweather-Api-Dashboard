@@ -45,4 +45,12 @@ body {
 
 #chosenCity{
   background-color: var(--light);
+
+}
+#chosenCity p{
+  margin: 10px;
+}
+
+#chosenCity h2{
+  margin: 10px;
 }
