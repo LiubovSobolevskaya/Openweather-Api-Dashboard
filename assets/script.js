@@ -259,7 +259,7 @@ function CityWeather(event) {
         return; // Exits the function if "city" is empty
     }
 
-    $("#city-input").val(""); // Resets the value of the input field with an ID of "city-input" to an empty string
+    $("#city-input").val(""); // Resets the value of the input field to an empty string
 
     // Gets the value of an item with a key of "cities" from local storage, parses it from a JSON string into a JavaScript object, and assigns it to the "storedCities" variable
     var storedCities = JSON.parse(localStorage.getItem("cities"));
