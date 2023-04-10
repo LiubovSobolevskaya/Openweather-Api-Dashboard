@@ -16,6 +16,8 @@ ___________________________
 * [JavaScript](https://www.javascript.com/)   
 * [Google Fonts](https://fonts.googleapis.com/) 
 * [jQuery](https://jquery.com/)
+* [ajax](https://api.jquery.com/jquery.ajax/)
+
 ## Web application's appearance and functionality
 
 ![](assets/imgs/video-to-gif.gif)

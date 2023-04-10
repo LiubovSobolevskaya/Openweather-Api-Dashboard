@@ -5,39 +5,32 @@ var city;
 function displayCityWeather() {
 
     var cityURL = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_key}`
-    console.log(cityURL)
+
 
     // Creating an AJAX call for the specific movie button being clicked
     $.ajax({
         url: cityURL,
         method: "GET"
     }).then(function(response) {
-        // if (!response){
-        //     alert("Please check the city name spelling!")
-        //     return;
-        // }
-        console.log(response[0]);
+        if (!$.trim(response)){
+            alert("Please check the city name spelling!")
+        }
+
         var lon = response[0].lon;
         var lat = response[0].lat;
   
         var weatherURL =`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
-        console.log(weatherURL)
-        
 
         $.ajax({
             url: weatherURL,  
             method: "GET"
         }).then(function(response) {
-            console.log(response);
             var temp = response.main.temp;
             var humidity = response.main.humidity;
             var windSpeed = response.wind.speed;
             var icon = response.weather[0].icon;
             var icon_png = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-            console.log(temp);
-            console.log(humidity);
-            console.log(windSpeed);
-            //console.log(icon );
+
             var cityDiv = $('#chosenCity').empty();
             cityDiv.addClass("card");
       
@@ -61,7 +54,6 @@ function displayCityWeather() {
             // Displaying Temperature
             cityDiv.append(pTemp);
     
-   
             var pHumidity = $("<p>")
             pHumidity.text("Humidity: " + humidity + "%");
            
@@ -79,7 +71,7 @@ function displayCityWeather() {
 
         }); 
         var forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
-        console.log(forecastURL);
+
         $.ajax({
             url: forecastURL,  
             method: "GET"
@@ -128,9 +120,6 @@ function displayCityWeather() {
                 days.shift()
             }
 
-            console.log(temperature_max);
-            console.log(temperature_min);
-
             function avg(array) {
                 var sum = 0;
                 for (let i = 0; i < array.length; i++) {
@@ -158,21 +147,18 @@ function displayCityWeather() {
                 return min_value;
             }
 
-
-            console.log(days);
             moreDaysContainer = $("#more-weather-days").empty();
             for (var i=0; i<days.length; i++){
 
                 var cityCard = $("<div>");
                 cityCard.addClass("col-6 col-md-2 col-lg-2");
                 day = days[i];
-                console.log(day);
-  
+
                 var temp_max = max(temperature_max[day]);
             
                 var temp_min = min(temperature_min[day]);
     
-                var humidity_mean = avg(humidity[day]);
+                var humidity_mean = avg(humidity[day]).toFixed(2);
                 var windSpeed_max = max(windSpeed[day]);
                
                 var countIcons = {}
@@ -229,7 +215,7 @@ function displayCityWeather() {
      
                 // Creating an element to hold the plot
                 var pWindSp= $("<p>")
-                pWindSp.text("Max Wind Speed: " + windSpeed_max + "MPH");
+                pWindSp.text("Max Wind Speed: " + windSpeed_max + " MPH");
                 // Displaying Wind Speed
                 cityCard.append(pWindSp);
                 moreDaysContainer.append(cityCard);
@@ -237,40 +223,50 @@ function displayCityWeather() {
 
             }
    
-
           
         }); 
 
 
     });
+
 }
 
-function CityWeather(event){
-    event.preventDefault();
+function CityWeather(event) {
+    // Prevents the default behavior of the event (submitting a form and reloading the page)
+    event.preventDefault(); 
 
+    // Gets the value of an input field with an ID of "city-input", removes any leading/trailing whitespace, and assigns it to the "city" variable
     city = $("#city-input").val().trim();
-    if (city && city!=""){
-        displayCityWeather();
-    }
-    else{
-        return;
-    }
-    $("#city-input").val("");
 
+    if (city && city != "") { // Checks if the "city" variable has a value and is not an empty string
+        result = displayCityWeather()
+        if (!result){
+            return;
+        } // Calls the "displayCityWeather" function (not shown in this code snippet)
+    } else {
+        return; // Exits the function if "city" is empty
+    }
+
+    $("#city-input").val(""); // Resets the value of the input field with an ID of "city-input" to an empty string
+
+    // Gets the value of an item with a key of "cities" from local storage, parses it from a JSON string into a JavaScript object, and assigns it to the "storedCities" variable
     var storedCities = JSON.parse(localStorage.getItem("cities"));
-    if (!storedCities) {
-        // If no scores are stored, create a new array
-        storedCities = [];
+
+    if (!storedCities) { // Checks if "storedCities" is null or undefined
+        storedCities = []; // Initializes an empty array if there is no value stored for the "cities" key in local storage
     }
-    if (!storedCities.includes(city)){
-        storedCities.push(city);
+
+    if (!storedCities.includes(city)) { // Checks if the "storedCities" array does not already contain the "city" variable
+        storedCities.push(city); // Adds the "city" variable to the end of the "storedCities" array using the "push" method
     }
-    
+
+    // Sets the value of an item with a key of "cities" in local storage to the stringified version of the "storedCities" array
+    // using the "setItem" method
     localStorage.setItem("cities", JSON.stringify(storedCities));
-    renderButtons()
 
-
+    renderButtons(); // Calls the "renderButtons" function (not shown in this code snippet), presumably to update a list of buttons/links that allow the user to select previously searched
 }
+
 $("#city-search-btn").on("click", CityWeather);
 
 
