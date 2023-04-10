@@ -14,7 +14,8 @@ function displayCityWeather() {
     }).then(function(response) {
         // If the response from the API call is empty, display an alert
         if (!$.trim(response)){
-            alert("Please check the city name spelling!")
+            alert("Please check the city name spelling!");
+            return;
         }
          // Get the longitude and latitude of the city from the API response
         var lon = response[0].lon;
@@ -242,6 +243,7 @@ function displayCityWeather() {
 
     });
 
+
 }
 
 function CityWeather(event) {
@@ -252,10 +254,7 @@ function CityWeather(event) {
     city = $("#city-input").val().trim();
 
     if (city && city != "") { // Checks if the "city" variable has a value and is not an empty string
-        result = displayCityWeather()
-        if (!result){
-            return;
-        } // Calls the "displayCityWeather" function (not shown in this code snippet)
+        result = displayCityWeather();
     } else {
         return; // Exits the function if "city" is empty
     }
