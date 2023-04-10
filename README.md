@@ -13,12 +13,12 @@ ___________________________
 * [HTML](https://developer.mozilla.org/en-US/docs/Web/HTML)
 * [CSS](https://developer.mozilla.org/en-US/docs/Web/CSS)      
 * [Git](https://git-scm.com/)   
-* [JavaScript](https://www.javascript.com/)  
-??? or may be not 
-* [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) 
+* [JavaScript](https://www.javascript.com/)   
+* [Google Fonts](https://fonts.googleapis.com/) 
+* [jQuery](https://jquery.com/)
 ## Web application's appearance and functionality
 
-![](to be added)
+![](assets/imgs/video-to-gif.gif)
 
 ## Author Info
 
