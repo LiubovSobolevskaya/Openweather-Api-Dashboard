@@ -15,6 +15,23 @@ function displayCityWeather() {
         // If the response from the API call is empty, display an alert
         if (!$.trim(response)){
             alert("Please check the city name spelling!");
+            cities = JSON.parse(localStorage.getItem("cities"));
+            console.log(city);
+            console.log(cities);
+
+            idx = -1;
+            for (var j=0;j<cities.length;j++){
+                if (cities[j] ==city){
+                    idx = j;
+                }
+            }
+
+            console.log(idx);
+            if (idx!=-1){
+                cities.splice(idx, 1);
+                localStorage.setItem("cities", JSON.stringify(cities));
+                renderButtons();
+            }
             return;
         }
          // Get the longitude and latitude of the city from the API response
@@ -254,7 +271,7 @@ function CityWeather(event) {
     city = $("#city-input").val().trim();
 
     if (city && city != "") { // Checks if the "city" variable has a value and is not an empty string
-        result = displayCityWeather();
+        displayCityWeather();
     } else {
         return; // Exits the function if "city" is empty
     }
