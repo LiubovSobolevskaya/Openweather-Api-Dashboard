@@ -11,39 +11,39 @@ function displayCityWeather() {
     $.ajax({
         url: cityURL,
         method: "GET"
-    }).then(function(response) {
+    }).then(function (response) {
         // If the response from the API call is empty, display an alert
-        if (!$.trim(response)){
+        if (!$.trim(response)) {
             alert("Please check the city name spelling!");
             cities = JSON.parse(localStorage.getItem("cities"));
             console.log(city);
             console.log(cities);
 
-            idx = -1;
-            for (var j=0;j<cities.length;j++){
-                if (cities[j] ==city){
+            let idx = -1;
+            for (var j = 0; j < cities.length; j++) {
+                if (cities[j] == city) {
                     idx = j;
                 }
             }
 
             console.log(idx);
-            if (idx!=-1){
+            if (idx != -1) {
                 cities.splice(idx, 1);
                 localStorage.setItem("cities", JSON.stringify(cities));
                 renderButtons();
             }
             return;
         }
-         // Get the longitude and latitude of the city from the API response
-        var lon = response[0].lon;
-        var lat = response[0].lat;
+        // Get the longitude and latitude of the city from the API response
+        const lon = response[0].lon;
+        const lat = response[0].lat;
         // Build the URL for the weather API call using the longitude, latitude, and API key
-        var weatherURL =`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
+        const weatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
         // Make an AJAX call to the weather API using the URL and HTTP GET method
         $.ajax({
-            url: weatherURL,  
+            url: weatherURL,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             var temp = response.main.temp;
             var humidity = response.main.humidity;
             var windSpeed = response.wind.speed;
@@ -52,83 +52,83 @@ function displayCityWeather() {
             // Clear the previous city information and add a new card to hold the current city information
             var cityDiv = $('#chosenCity').empty();
             cityDiv.addClass("card");
-      
+
             // Create an element to hold the city name and icon
             var cityName = $("<h2>");
             var spanIcon = $("<span>");
-           
+
             var weatherIcon = $("<img>");
             weatherIcon.attr("src", icon_png)
             // Display the city name and current date using the dayjs library
             cityName.text(`${city} (${dayjs().format("MM/DD/YY")})`);
             spanIcon.append(weatherIcon);
-            cityName.append(spanIcon);    
+            cityName.append(spanIcon);
             // Displaying the city and the current Date
             cityDiv.append(cityName);
-    
+
             // Creating an element to hold the release year
             var pTemp = $("<p>")
             pTemp.text("Temperature: " + temp + "°F");
-    
+
             // Displaying Temperature
             cityDiv.append(pTemp);
-    
+
             var pHumidity = $("<p>")
             pHumidity.text("Humidity: " + humidity + "%");
-           
+
             // Displaying Humidity
             cityDiv.append(pHumidity);
 
             // Creating an element to hold the plot
-            var pWindSpeed= $("<p>")
+            var pWindSpeed = $("<p>")
             pWindSpeed.text("Weend Speed: " + windSpeed + "MPH");
-           
+
             // Displaying Wind Speed
             cityDiv.append(pWindSpeed);
 
             $('#forecastinfo').text('5 Days Forecast:');
 
-        }); 
-        var forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
+        });
+        const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${API_key}`;
 
         $.ajax({
-            url: forecastURL,  
+            url: forecastURL,
             method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
             forecast = response.list; // Extract the list of forecast data from the response
             var temperature_max = {}; // Create an empty object to store the maximum temperature for each day
-            var temperature_min= {}; // Create an empty object to store the minimum temperature for each day
+            var temperature_min = {}; // Create an empty object to store the minimum temperature for each day
             var humidity = {}; // Create an empty object to store the humidity for each day
             var windSpeed = {}; // Create an empty object to store the wind speed for each day
-            var icon= {}; // Create an empty object to store the weather icon for each day
+            var icon = {}; // Create an empty object to store the weather icon for each day
             var days = []; // Create an empty array to store the days for which data is available
-            
+
             // Loop through each item in the forecast data
-            for (var i=0;i<forecast.length; i++){
-                 // Extract the day from the datetime string and store it in the day variable
-                var day = forecast[i].dt_txt.split(' ')[0]; 
+            for (var i = 0; i < forecast.length; i++) {
+                // Extract the day from the datetime string and store it in the day variable
+                var day = forecast[i].dt_txt.split(' ')[0];
                 // If the day is not already in the days array, add it
-                if (!days.includes(day)){
+                if (!days.includes(day)) {
                     days.push(day);
                 }
-                 // If there is no entry for the day in the temperature_max object, create an empty array for it
-                if (!temperature_max[day]){
+                // If there is no entry for the day in the temperature_max object, create an empty array for it
+                if (!temperature_max[day]) {
                     temperature_max[day] = [];
                 }
                 // If there is no entry for the day in the temperature_min object, create an empty array for it
-                if (!temperature_min[day]){
+                if (!temperature_min[day]) {
                     temperature_min[day] = [];
                 }
                 // If there is no entry for the day in the humidity object, create an empty array for it
-                if (!humidity[day]){
+                if (!humidity[day]) {
                     humidity[day] = [];
                 }
                 // If there is no entry for the day in the windSpeed object, create an empty array for it
-                if (!windSpeed[day]){
+                if (!windSpeed[day]) {
                     windSpeed[day] = [];
                 }
                 // If there is no entry for the day in the icon object, create an empty array for it
-                if (!icon[day]){
+                if (!icon[day]) {
                     icon[day] = [];
                 }
                 // Add the temperature_max value for this forecast item to the temperature_max array for the day
@@ -140,11 +140,11 @@ function displayCityWeather() {
                 // Add the wind speed value for this forecast item to the windSpeed array for the day
                 windSpeed[day].push(forecast[i].wind.speed);
                 // Add the weather icon value for this forecast item to the icon array for the day
-                icon[day].push(forecast[i].weather[0].icon); 
+                icon[day].push(forecast[i].weather[0].icon);
 
-            }  
-             // If there are more than 5 days in the days array, remove the first day
-            if (days.length>5){
+            }
+            // If there are more than 5 days in the days array, remove the first day
+            if (days.length > 5) {
                 days.shift()
             }
             // Define a function to calculate the average of an array of values 
@@ -159,7 +159,7 @@ function displayCityWeather() {
             function max(array) {
                 var maxValue = array[0];
                 for (let i = 1; i < array.length; i++) {
-                    if (array[i]>maxValue){
+                    if (array[i] > maxValue) {
                         maxValue = array[i];
                     }
                 }
@@ -169,7 +169,7 @@ function displayCityWeather() {
             function min(array) {
                 var minValue = array[0];
                 for (let i = 1; i < array.length; i++) {
-                    if (array[i]<minValue){
+                    if (array[i] < minValue) {
                         minValue = array[i];
                     }
                 }
@@ -178,7 +178,7 @@ function displayCityWeather() {
             // Select and empty the container for the weather data
             moreDaysContainer = $("#more-weather-days").empty();
             // Loop through each day in the 'days' array
-            for (var i=0; i<days.length; i++){
+            for (var i = 0; i < days.length; i++) {
 
                 var cityCard = $("<div>");
                 // Add CSS classes to the div to control its layout
@@ -193,22 +193,22 @@ function displayCityWeather() {
                 // Create an object to keep track of how many times each weather icon appears
                 var countIcons = {}
                 // Loop through each weather icon for this day and count how many times each one appears
-                for (var j=0; j<icon[day].length; j++){
+                for (var j = 0; j < icon[day].length; j++) {
                     var icon_img = icon[day][j];
-                    if (!countIcons[icon_img ]){
-                        countIcons[icon_img ] = 1;
+                    if (!countIcons[icon_img]) {
+                        countIcons[icon_img] = 1;
                     }
-                    else{
+                    else {
                         countIcons[icon_img]++;
                     }
                 }
                 // Find the most commonly-occurring weather icon for this day 
                 var max_count = countIcons[icon[day][0]];
                 var max_icon = icon[day][0];
-         
-                for (var j=0; j<icon[day].length; j++){
+
+                for (var j = 0; j < icon[day].length; j++) {
                     var icon_img = icon[day][j];
-                    if ( countIcons[icon_img] > max_count){
+                    if (countIcons[icon_img] > max_count) {
                         max_count = countIcons[icon_img];
                         max_icon = icon_img
                     }
@@ -221,41 +221,41 @@ function displayCityWeather() {
                 var weatherIcon = $("<img>");
                 weatherIcon.attr("src", icon_png)
                 // Format the date and add it to the heading element
-                date.text(day.split('-')[1]+'/'+day.split('-')[2]+'/'+day.split('-')[0]);
+                date.text(day.split('-')[1] + '/' + day.split('-')[2] + '/' + day.split('-')[0]);
                 spanIcon.append(weatherIcon);
-                date.append(spanIcon);   
+                date.append(spanIcon);
                 // Add the date and weather data to the city card div
                 cityCard.append(date);
-     
+
                 var pTemp_min = $("<p>")
                 pTemp_min.text("Temp min: " + temp_min + "°F");
                 // Displaying  min Temperature
                 cityCard.append(pTemp_min);
- 
+
                 var pTemp_max = $("<p>")
                 pTemp_max.text("Temp max: " + temp_max + "°F");
                 // Displaying  max Temperature
                 cityCard.append(pTemp_max);
 
                 var pHum = $("<p>");
-    
+
                 pHum.text("Avg Humidity: " + humidity_mean + "%");
-            
+
                 // Displaying Humidity
                 cityCard.append(pHum);
-     
+
                 // Creating an element to hold the plot
-                var pWindSp= $("<p>")
+                var pWindSp = $("<p>")
                 pWindSp.text("Max Wind Speed: " + windSpeed_max + " MPH");
                 // Displaying Wind Speed
                 cityCard.append(pWindSp);
                 moreDaysContainer.append(cityCard);
-              
+
 
             }
-   
-          
-        }); 
+
+
+        });
 
 
     });
@@ -265,7 +265,7 @@ function displayCityWeather() {
 
 function CityWeather(event) {
     // Prevents the default behavior of the event (submitting a form and reloading the page)
-    event.preventDefault(); 
+    event.preventDefault();
 
     // Gets the value of an input field with an ID of "city-input", removes any leading/trailing whitespace, and assigns it to the "city" variable
     city = $("#city-input").val().trim();
@@ -303,7 +303,7 @@ $("#city-search-btn").on("click", CityWeather);
 function renderButtons() {
 
     cities = JSON.parse(localStorage.getItem("cities"));
-    
+
     // Deleting the movies prior to adding new movies
     // (this is necessary otherwise you will have repeat buttons)
     $("#buttons-view").empty();
@@ -316,7 +316,7 @@ function renderButtons() {
 
         var newButton = $("<button>");
         // Adding a class of movie-btn to our button
-  
+
         // Adding a data-attribute
         newButton.attr("data-city", cities[i]);
         // Providing the initial button text
@@ -326,7 +326,7 @@ function renderButtons() {
         $("#buttons-view").prepend(newButton);
     }
 }
-function showCity(){
+function showCity() {
     city = $(this).attr("data-city");
     displayCityWeather()
 
